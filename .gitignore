@@ -352,3 +352,4 @@ terraform.rc
 # Other Files
 keys/
 *.json
+data/
