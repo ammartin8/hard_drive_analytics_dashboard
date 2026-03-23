@@ -1,4 +1,4 @@
-FROM python:3.13.11-slim
+FROM python:3.13-slim
 
 # Copy uv binary from offcial uv image
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/
@@ -19,4 +19,4 @@ RUN uv sync --locked
 COPY main.py .
 
 # Set entrypoint
-ENTRYPOINT ["python", "main.py"]
+ENTRYPOINT ["bash"]

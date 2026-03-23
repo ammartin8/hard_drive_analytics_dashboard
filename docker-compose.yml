@@ -4,7 +4,7 @@ services:
       context: .           # Current directory containing Dockerfile and source files
       dockerfile: Dockerfile
     volumes:
-      - .:/code           # Optional: Mount current directory for development
+      - .:/app           # Optional: Mount current directory for development
     ports:
       - "8000:8000"    
   
@@ -13,7 +13,7 @@ services:
     environment:
       POSTGRES_USER: "root"
       POSTGRES_PASSWORD: "root"
-      POSTGRES_DB: "hard_drive"
+      POSTGRES_DB: "hard_drive_db"
     volumes:
       - "hard_drive_postgres_data:/var/lib/postgresql"
     ports:
