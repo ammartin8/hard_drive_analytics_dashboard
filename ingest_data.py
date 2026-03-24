@@ -68,19 +68,23 @@ def download_data(year=2025, qtr=1):
     # Download zip file from URL and save to download_dir
     zip_path = os.path.join(download_dir, zip_filename)
     
-    print(f"Downloading {zip_url} to {zip_path}...")
-    response = requests.get(zip_url, stream=True)
-    response.raise_for_status()  # Raise HTTPError for bad responses
-    
-    with open(zip_path, 'wb') as f:
-        for chunk in response.iter_content(chunk_size=8192):
-            if chunk:
-                f.write(chunk)
-    print(f"{zip_path} is downloaded!")
-    return zip_path
+    if os.path.exists(zip_path):
+        print(f"File already exist! File saved here: {zip_path}\n")
+        return zip_path
+    else:
+        print(f"Downloading {zip_url} to {zip_path}...")
+        response = requests.get(zip_url, stream=True)
+        response.raise_for_status()  # Raise HTTPError for bad responses
+        
+        with open(zip_path, 'wb') as f:
+            for chunk in response.iter_content(chunk_size=8192):
+                if chunk:
+                    f.write(chunk)
+        print(f"{zip_path} is downloaded!")
+        return zip_path
 
 
-def unzip_file(input_file):
+def unzip_and_load_to_postgres(input_file, con, target_table):
     """
     Extracts ZIP file contents to a date-based directory under ../data/source_csv/.
 
@@ -102,24 +106,70 @@ def unzip_file(input_file):
         - Raises error if ZIP contents contain unsupported or corrupt entries
     """
     # Extract year and qtr from zip_path to create folder names
-    zip_path_year = input_file.split('/')[-1].split('_')[-1].split('.')[0]
+    zip_path_year = input_file.split('/')[-1].split('_')[-1].split('.')[0] # outputs year
 
-    # Ensure extract directory exists
     extract_dir=f"./data/source_csv/{zip_path_year}"
     os.makedirs(extract_dir, exist_ok=True)
-    
+
     # Validate input file exists
     if not os.path.isfile(input_file):
-        raise FileNotFoundError(f"Input file does not exist: {input_file}")
+        raise FileNotFoundError(f"Input file does not exist: {input_file}.")
     
     with zipfile.ZipFile(input_file, 'r') as zip_ref:
-        # List contents (optional check)
-        print("Contents:", zip_ref.namelist())
-        
+        # # Check if any csv files exist first
+        # existing_files = glob(os.path.join(extract_dir, csv_dir_name, '*'))
+    
+        # if len(existing_files) > 0:
+        #     print(f"CSV files already exist in: {extract_dir}")
+
+
         # Extract all files to the specified extract directory
+        # List contents (optional check)
+        print(f"Extracting the following contents: {zip_ref.namelist()} \n")
         zip_ref.extractall(extract_dir)
-        print(f"A total of {len(zip_ref.namelist())} file(s) extracted.") 
-        print(f"Extracted to: {extract_dir}")
+        print(f"A total of {len(zip_ref.namelist())} file(s) extracted to: {extract_dir}\n")
+        
+        
+    # Create empty dataframe with selected column names
+
+    
+    first_file = f"{extract_dir}/{zip_ref.namelist()[0]}"
+
+    df = pd.read_csv(first_file
+    , nrows=0
+    , dtype=dtype
+    , parse_dates=parse_dates)
+    col_to_keep = []
+
+    for col in df.columns:
+        if col in dtype or col in parse_dates:
+            col_to_keep.append(col)
+
+    print(f"Columns to extract from source csv: {col_to_keep}\n")
+
+    # Extract csv directory name and list of files
+    csv_dir = first_file.split('/')[-2]
+
+    files = sorted(os.listdir(f"{extract_dir}/{csv_dir}"))
+
+    first = True
+    for file in files:
+        if first:
+            df = pd.read_csv(f"{extract_dir}/{csv_dir}/{file}"
+                , usecols=col_to_keep
+                , nrows = 0 # only defining column headers postgres
+                , dtype=dtype
+                , parse_dates=parse_dates)
+            df.to_sql(name=target_table, index=False, con=con, if_exists='replace')
+            print(f"Table created with the following schema: \n {pd.io.sql.get_schema(df, name=target_table, con=con)}\n")
+            first = False
+        
+        df = pd.read_csv(f"{extract_dir}/{csv_dir}/{file}"
+            , usecols=col_to_keep
+            , dtype=dtype
+            , parse_dates=parse_dates)
+        df.to_sql(name=target_table, index=False, con=con, if_exists='append')
+        print(f"Loaded {len(df)} records from file: {file}")
 
 
 @click.command()
@@ -130,13 +180,17 @@ def unzip_file(input_file):
 @click.option('--pg-db', default='hard_drive_db', help='PostgreSQL database name')
 @click.option('--target-table', default='hard_drive_data', help='Target table name')
 def run(pg_user, pg_pass, pg_host, pg_port, pg_db, target_table):
-    # Ingestion logic here
-    
+    # Create postgres database connection
+    url = f'postgresql+psycopg://{pg_user}:{pg_pass}@{pg_host}:{pg_port}/{pg_db}'
+    engine = create_engine(url)
+    print("Postgres connection created!\n")
+
     # Download data and save file path to variable
     download_data_path = download_data(year=2025, qtr=1)
 
     # Takes file path and unzips files from download file path
-    unzip_file(input_file=download_data_path)
+    unzip_and_load_to_postgres(input_file=download_data_path, con=engine, target_table=target_table)
+    
 
 
 if __name__ == '__main__':
