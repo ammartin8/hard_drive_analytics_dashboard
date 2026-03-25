@@ -117,10 +117,10 @@ def unzip_and_load_to_postgres(input_file, con, target_table):
     
     with zipfile.ZipFile(input_file, 'r') as zip_ref:
         # # Check if any csv files exist first
-        # existing_files = glob(os.path.join(extract_dir, csv_dir_name, '*'))
+        existing_files = glob(os.path.join(extract_dir, csv_dir_name, '*'))
     
-        # if len(existing_files) > 0:
-        #     print(f"CSV files already exist in: {extract_dir}")
+        if len(existing_files) > 0:
+            print(f"CSV files already exist in: {extract_dir}")
 
 
         # Extract all files to the specified extract directory
@@ -156,20 +156,25 @@ def unzip_and_load_to_postgres(input_file, con, target_table):
     for file in files:
         if first:
             df = pd.read_csv(f"{extract_dir}/{csv_dir}/{file}"
-                , usecols=col_to_keep
-                , nrows = 0 # only defining column headers postgres
                 , dtype=dtype
-                , parse_dates=parse_dates)
+                , parse_dates=parse_dates
+                , usecols=col_to_keep
+                ).head(0)
             df.to_sql(name=target_table, index=False, con=con, if_exists='replace')
             print(f"Table created with the following schema: \n {pd.io.sql.get_schema(df, name=target_table, con=con)}\n")
             first = False
         
         df = pd.read_csv(f"{extract_dir}/{csv_dir}/{file}"
-            , usecols=col_to_keep
             , dtype=dtype
-            , parse_dates=parse_dates)
+            , parse_dates=parse_dates
+            , usecols=col_to_keep
+            )
         df.to_sql(name=target_table, index=False, con=con, if_exists='append')
         print(f"Loaded {len(df)} records from file: {file}")
+
+
+def convert_data_to_parquet():
+    pass
 
 
 @click.command()

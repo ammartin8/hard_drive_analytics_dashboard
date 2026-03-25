@@ -23,7 +23,7 @@
 3. Architecture & Data Flow
 4. Technology Stack  
 5. Phase-by-Phase Implementation Plan  
-6. Evaluation Criteria Mapping  
+
 
 ---
 
