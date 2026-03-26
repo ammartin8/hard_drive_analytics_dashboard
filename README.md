@@ -91,7 +91,6 @@ flowchart TD
 | Dashboard          | Streamlit              | Interactive UI with two tiles                                         |
 | Infrastructure     | Terraform              | Provision GCS, BigQuery, Kestra, compute instances                    |
 | Containerization   | Docker                 | Package Spark, dbt, and Streamlit apps for reproducibility            |
-| CI/CD (Optional)   | GitHub Actions         | Automate Terraform, dbt, and Kestra deployments                       |
 
 ---
 
