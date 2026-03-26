@@ -346,7 +346,7 @@ override.tf.json
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
-
+variables.tf
 # End of https://www.toptal.com/developers/gitignore/api/python,spark,jupyternotebooks,dbt,terraform,data,database
 
 # Other Files
