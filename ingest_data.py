@@ -107,6 +107,7 @@ def unzip_and_load_to_postgres(input_file, con, target_table):
     """
     # Extract year and qtr from zip_path to create folder names
     zip_path_year = input_file.split('/')[-1].split('_')[-1].split('.')[0] # outputs year
+    base_dir_name = input_file.split('/')[-1].split('.')[0] # outputs data_{qtr}_{year}
 
     extract_dir=f"./data/source_csv/{zip_path_year}"
     os.makedirs(extract_dir, exist_ok=True)
@@ -117,17 +118,16 @@ def unzip_and_load_to_postgres(input_file, con, target_table):
     
     with zipfile.ZipFile(input_file, 'r') as zip_ref:
         # # Check if any csv files exist first
-        existing_files = glob(os.path.join(extract_dir, csv_dir_name, '*'))
+        existing_files = os.listdir(f'{extract_dir}/{base_dir_name}')[0]
     
         if len(existing_files) > 0:
-            print(f"CSV files already exist in: {extract_dir}")
-
-
-        # Extract all files to the specified extract directory
-        # List contents (optional check)
-        print(f"Extracting the following contents: {zip_ref.namelist()} \n")
-        zip_ref.extractall(extract_dir)
-        print(f"A total of {len(zip_ref.namelist())} file(s) extracted to: {extract_dir}\n")
+            print(f"CSV files already exist in: {extract_dir}/{base_dir_name}")
+        else:
+            # Extract all files to the specified extract directory
+            # List contents (optional check)
+            print(f"Extracting the following contents: {zip_ref.namelist()} \n")
+            zip_ref.extractall(extract_dir)
+            print(f"A total of {len(zip_ref.namelist())} file(s) extracted to: {extract_dir}\n")
         
         
     # Create empty dataframe with selected column names
