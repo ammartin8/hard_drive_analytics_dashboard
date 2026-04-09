@@ -58,15 +58,15 @@ The pipeline will be **batch-oriented**, orchestrated via Apache Airflow (Docker
 
 ```mermaid
 flowchart TD
-    A[Raw Data: Backblaze CSVs] --> B[Ingestion to GCS via Airflow + Local Python Scripts]
-    B --> C[Airflow Orchestration (Docker Container)]
-    C --> D[Extract, Transform, Load Operations]
-    D --> E[Upload Parquet to GCS Data Lake]
-    E --> F[dbt Transformations: Star Schema on BigQuery]
-    F --> G[BigQuery Storage Layer]
-    G --> H[Streamlit Dashboard]
-    H --> I[Tile 1: Manufacturer Failure Rates]
-    H --> J[Tile 2: Failure Trends Over Time]
+    A[Raw Data: Backblaze CSVs] --> B["Ingestion to GCS via Airflow"]
+    B --> C["Extract Transform Load ETL Operations"]
+    C --> D["Upload Parquet to GCS Data Lake"]
+    D --> E["dbt Transformations: Star Schema on BigQuery"]
+    E --> F["BigQuery Storage Layer"]
+    F --> G["Streamlit Dashboard"]
+    G --> H["Tile 1: Manufacturer Failure Rates"]
+    H --> I["Tile 2: Failure Trends Over Time"]
+
 ```
 
 > **Notes**:  
