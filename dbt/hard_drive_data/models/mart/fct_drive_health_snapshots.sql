@@ -12,6 +12,7 @@ with draft_drive_data as (
     vault_id,
     pod_id,
     pod_slot_num,
+    unique_device_event_id,
     serial_number,
     model,
     capacity_gigabytes,

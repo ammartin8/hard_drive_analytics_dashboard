@@ -2,10 +2,16 @@ with hard_drive_data as (
     select * from {{ ref("stg_hard_drive_data")}}
 )
 select
--- dates
+    {{ dbt_utils.generate_surrogate_key([
+        'report_date',
+        'serial_number',
+        'model',
+        'capacity_bytes'
+    ]) }} as unique_device_event_id,
+    -- dates
     report_date,
 
-    -- identifiers
+    -- datacenter/location identifiers
     datacenter,
     cluster_id,
     vault_id,
@@ -13,6 +19,7 @@ select
     pod_slot_num,
     
     -- device identifiers
+
     serial_number,
     model,
     FLOOR((capacity_bytes/1000000000)) as capacity_gigabytes,
