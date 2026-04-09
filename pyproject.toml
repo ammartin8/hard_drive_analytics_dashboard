@@ -5,7 +5,12 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "apache-airflow>=3.1.8",
+    "apache-airflow-providers-google>=21.0.0",
     "click>=8.1.7",
+    "dbt-bigquery>=1.11.0",
+    "dbt-duckdb>=1.10.1",
+    "duckdb-cli>=1.5.1",
     "ipykernel>=7.2.0",
     "jupyter>=1.1.1",
     "numpy>=2.4.3",
@@ -13,6 +18,7 @@ dependencies = [
     "psycopg[binary,pool]>=3.3.3",
     "pyarrow>=23.0.1",
     "pyspark>=4.1.1",
+    "python-dotenv>=1.2.2",
     "sqlalchemy>=2.0.48",
 ]
 

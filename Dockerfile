@@ -16,7 +16,7 @@ COPY pyproject.toml .python-version uv.lock ./
 RUN uv sync --locked
 
 # Copy scripts
-COPY main.py .
+COPY ./scripts/ingest_data.py .
 
 # Set entrypoint
 ENTRYPOINT ["bash"]

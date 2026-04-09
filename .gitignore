@@ -349,7 +349,32 @@ terraform.rc
 variables.tf
 # End of https://www.toptal.com/developers/gitignore/api/python,spark,jupyternotebooks,dbt,terraform,data,database
 
+# Airflow files
+logs/
+*.log
+
+# Local state and temp files
+.dags_state.db
+__pycache__/
+*.pyc
+.pytest_cache/
+.airflow
+.env  
+
+# Generated SQL or compiled assets
+dist/
+build/
+venv/bin/python
+
+# dbt files
+profiles.yml
+.user.yml
+
+
 # Other Files
+airflow.cfg
 keys/
 *.json
 data/
+.google/
+scripts/

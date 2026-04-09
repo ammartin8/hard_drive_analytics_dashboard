@@ -1,0 +1,63 @@
+version: 2
+
+sources:
+  - name: raw_data
+    description: Raw hard drive failure data from Backblaze
+    database: |
+      {%- if target.type == 'bigquery' -%}
+        {{ env_var('GCP_PROJECT_ID', 'dtc-de-mod1-workshop22937') }}
+      {%- else -%}
+        hard_drive_data
+      {%- endif -%}
+    schema: |
+      {%- if target.type == 'bigquery' -%}
+        hard_drive_dataset
+      {%- else -%}
+        hard_drive_dataset
+      {%- endif -%}
+    tables:
+      - name: hard_drive_data_tbl_ext
+        description: External table for Backblaze hard drive failure data (Parquet source)
+        columns:
+          - name: date
+            description: Date in YYYY-MM-DD format (Date)
+          - name: serial_number
+            description: Unique serial number of the hard drive (string)
+          - name: model
+            description: Model identifier of the hard drive (string)
+          - name: capacity_bytes
+            description: Hard drive capacity in bytes (Int64)
+          - name: failure
+            description: Failure indicator (1 = failed, 0 = healthy) (Int64)
+          - name: datacenter
+            description: Data center location identifier (string)
+          - name: cluster_id
+            description: Cluster/zone ID within datacenter (Int64)
+          - name: vault_id
+            description: Vault/enclosure ID (Int64)
+          - name: pod_id
+            description: Storage array pod ID (Int64)
+          - name: pod_slot_num
+            description: Slot position within the drive enclosure (Int64)
+          - name: is_legacy_format
+            description: Flag indicating if data uses legacy format structure (boolean)
+          - name: smart_5_normalized
+            description: SMART attribute 5 normalized value (float64, health status)
+          - name: smart_5_raw
+            description: Raw SMART attribute 5 value (float64)
+          - name: smart_187_normalized
+            description: SMART attribute 187 normalized value (float64, read error rate)
+          - name: smart_187_raw
+            description: Raw SMART attribute 187 value (float64)
+          - name: smart_188_normalized
+            description: SMART attribute 188 normalized value (float64, current pending sector count)
+          - name: smart_188_raw
+            description: Raw SMART attribute 188 value (float64)
+          - name: smart_197_normalized
+            description: SMART attribute 197 normalized value (float64, reported uncorrectable sectors)
+          - name: smart_197_raw
+            description: Raw SMART attribute 197 value (float64)
+          - name: smart_198_normalized
+            description: SMART attribute 198 normalized value (float64, reallocated sector count)
+          - name: smart_198_raw
+            description: Raw SMART attribute 198 value (float64)
