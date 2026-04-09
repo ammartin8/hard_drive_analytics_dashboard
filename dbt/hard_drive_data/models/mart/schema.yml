@@ -1,0 +1,18 @@
+version: 2
+
+models:
+  - name: dim_device_inventory
+    description: "Dimension table containing device inventory details including serial number and manufacturer."
+    columns:
+      - name: serial_number
+        description: "Unique identifier for each drive device."
+        data_type: string
+      - name: model
+        description: "Model identifier of the hard drive."
+        data_type: string
+      - name: manufacturer
+        description: "Manufacturer name of the hard drive (defaults to 'Unknown' if missing)."
+        data_type: string
+      - name: capacity_gigabytes
+        description: "Storage capacity of the device in gigabytes."
+        data_type: float

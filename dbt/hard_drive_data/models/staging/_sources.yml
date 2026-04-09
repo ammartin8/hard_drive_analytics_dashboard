@@ -21,43 +21,64 @@ sources:
         columns:
           - name: date
             description: Date in YYYY-MM-DD format (Date)
+            data_type: date
           - name: serial_number
             description: Unique serial number of the hard drive (string)
+            data_type: string
           - name: model
             description: Model identifier of the hard drive (string)
+            data_type: string
           - name: capacity_bytes
             description: Hard drive capacity in bytes (Int64)
+            data_type: int64
           - name: failure
             description: Failure indicator (1 = failed, 0 = healthy) (Int64)
+            data_type: int64
           - name: datacenter
             description: Data center location identifier (string)
+            data_type: string
           - name: cluster_id
             description: Cluster/zone ID within datacenter (Int64)
+            data_type: int64
           - name: vault_id
             description: Vault/enclosure ID (Int64)
+            data_type: int64
           - name: pod_id
             description: Storage array pod ID (Int64)
+            data_type: int64
           - name: pod_slot_num
             description: Slot position within the drive enclosure (Int64)
+            data_type: int64
           - name: is_legacy_format
             description: Flag indicating if data uses legacy format structure (boolean)
+            data_type: boolean
           - name: smart_5_normalized
             description: SMART attribute 5 normalized value (float64, health status)
+            data_type: float64
           - name: smart_5_raw
             description: Raw SMART attribute 5 value (float64)
+            data_type: float64
           - name: smart_187_normalized
             description: SMART attribute 187 normalized value (float64, read error rate)
+            data_type: float64
           - name: smart_187_raw
             description: Raw SMART attribute 187 value (float64)
+            data_type: float64
           - name: smart_188_normalized
             description: SMART attribute 188 normalized value (float64, current pending sector count)
+            data_type: float64
           - name: smart_188_raw
             description: Raw SMART attribute 188 value (float64)
+            data_type: float64
           - name: smart_197_normalized
             description: SMART attribute 197 normalized value (float64, reported uncorrectable sectors)
+            data_type: float64
           - name: smart_197_raw
             description: Raw SMART attribute 197 value (float64)
+            data_type: float64
           - name: smart_198_normalized
             description: SMART attribute 198 normalized value (float64, reallocated sector count)
+            data_type: float64
           - name: smart_198_raw
             description: Raw SMART attribute 198 value (float64)
+            data_type: float64
