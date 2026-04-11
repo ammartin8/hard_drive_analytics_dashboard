@@ -1,0 +1,36 @@
+:root {
+    /* Custom Color Palette for Hard Drive Dashboard */
+    --bg-color: #0d1b2a;      /* Deep Navy Background */
+    --card-bg: #162537;       /* Lighter Slate for Cards */
+    --text-main: #e0e1dd;     /* Off-white text */
+    --accent-blue: #4cc9f0;   /* Cyan highlight */
+    --border-color: #2a3b55;  /* Card borders */
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* Override Streamlit default metric widget container styles */
+.stMetric {
+    padding: 10px !important;
+    border-radius: 8px !important;
+    background-color: var(--card-bg) !important;
+    border: 1px solid var(--border-color) !important;
+}
+
+/* KPI Tile Styling (If using HTML containers) */
+.kpi-tile-container {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+/* Custom Icon styling to match dashboard look */
+.stIcon {
+    font-size: 1.5rem !important;
+}
