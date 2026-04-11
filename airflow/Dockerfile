@@ -10,7 +10,6 @@ WORKDIR $AIRFLOW_HOME
 
 # Copy dependency files
 COPY ./pyproject.toml ./.python-version ./uv.lock ./
-COPY ./scripts/setup_gcp_connection.py ./scripts/
 
 RUN uv venv && uv sync
 
