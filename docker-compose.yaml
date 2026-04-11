@@ -74,7 +74,7 @@ x-airflow-common:
     AIRFLOW_CONFIG: '/opt/airflow/config/airflow.cfg'
     GOOGLE_APPLICATION_CREDENTIALS: ./.google/credentials/google_credentials.json
     AIRFLOW_CONN_GOOGLE_CLOUD_DEFAULT: 'google-cloud-platform://?extra__google_cloud_platform__key_path=/.google/credentials/google_credentials.json'
-    AIRFLOW__CORE__TEST_CONNECTION: enabled
+    AIRFLOW__CORE__TEST_CONNECTION: 'Enabled'
     GCP_PROJECT_ID: ${GCP_PROJECT_ID}
     GCS_BUCKET_NAME: ${GCS_BUCKET_NAME}
   volumes:

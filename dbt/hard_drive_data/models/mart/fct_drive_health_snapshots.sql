@@ -42,6 +42,8 @@ with draft_drive_data as (
     quarter_number,
     month_name,
     day_name,
+    year_month, 
+    month_year_name,
 
     -- Datacenter/Location info
     dda.datacenter,

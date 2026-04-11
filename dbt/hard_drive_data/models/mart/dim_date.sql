@@ -9,13 +9,16 @@ SELECT
     date_day,
     EXTRACT(YEAR FROM date_day) AS year_number,
     FORMAT('%02d', EXTRACT(MONTH FROM date_day)) AS month_number,
+    FORMAT_DATE('%Y-%m', date_day) AS year_month,
     FORMAT('%02d', EXTRACT(DAY FROM date_day)) AS day_number,
     EXTRACT(DAYOFWEEK FROM date_day) AS day_of_week,
     FORMAT('%03d', EXTRACT(DAYOFYEAR FROM date_day)) AS day_of_year,
     FORMAT('%02d', EXTRACT(WEEK FROM date_day)) AS week_of_year,     
     EXTRACT(QUARTER FROM date_day) AS quarter_number,
     FORMAT_DATE('%B', date_day) AS month_name,
-    FORMAT_DATE('%A', date_day) AS day_name
+    FORMAT_DATE('%A', date_day) AS day_name,
+    FORMAT_DATE('%b %Y', date_day) AS month_year_name
+    
 FROM (
     SELECT d AS date_day
     FROM UNNEST(
