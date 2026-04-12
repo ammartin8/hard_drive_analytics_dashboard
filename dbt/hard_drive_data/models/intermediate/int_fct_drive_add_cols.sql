@@ -6,7 +6,12 @@ select
         'report_date',
         'serial_number',
         'model',
-        'capacity_bytes'
+        'capacity_bytes',
+        'datacenter',
+        'cluster_id',
+        'vault_id',
+        'pod_id',
+        'pod_slot_num'
     ]) }} as unique_device_event_id,
     -- dates
     report_date,

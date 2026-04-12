@@ -1,83 +1,106 @@
 version: 2
 
-sources:
-  - name: hard_drive_dataset
-    description: "Primary source for hard drive hardware and operational telemetry data."
-    tables:
-      - name: latest_quarterly_drive_trends_per_manufacturer
-        description: "Snapshot view showing the most recent quarterly failure metrics aggregated by manufacturer and model."
-        columns:
-          - name: year_number
-            data_type: int64
-            description: "Calendar year of the trend snapshot."
-          - name: quarter_number
-            data_type: int64
-            description: "Calendar quarter number (1-4) of the trend snapshot."
-          - name: manufacturer
-            data_type: string
-            description: "Drive manufacturer brand for this trend record."
-          - name: model
-            data_type: string
-            description: "Specific drive model associated with these trends."
-          - name: failed_drives
-            data_type: int64
-            description: "Total count of drives reported as failed in this quarter."
-          - name: total_drives
-            data_type: int64
-            description: "Total count of active drives tracked for this manufacturer/model in this quarter."
-          - name: failure_rate
-            data_type: float64
-            description: "Calculated failure rate percentage (failed_drives / total_drives * 100)."
+models:
+    - name: latest_quarterly_drive_trends_per_manufacturer
+      description: "Snapshot view showing the most recent quarterly failure metrics aggregated by manufacturer and model."
+      columns:
+        - name: year_number
+          data_type: int64
+          description: "Calendar year of the trend snapshot."
+          data_tests:
+            - not_null
+        - name: quarter_number
+          data_type: int64
+          description: "Calendar quarter number (1-4) of the trend snapshot."
+          data_tests:
+            - not_null
+        - name: manufacturer
+          data_type: string
+          description: "Drive manufacturer brand for this trend record."
+        - name: model
+          data_type: string
+          description: "Specific drive model associated with these trends."
+        - name: failed_drives
+          data_type: int64
+          description: "Total count of drives reported as failed in this quarter."
+        - name: total_drives
+          data_type: int64
+          description: "Total count of active drives tracked for this manufacturer/model in this quarter."
+          data_tests:
+            - not_null
+        - name: failure_rate
+          data_type: float64
+          description: "Calculated failure rate percentage (failed_drives / total_drives * 100)."
 
-      - name: monthly_fail_rates
-        description: "Detailed time-series view of failure metrics calculated on a monthly basis."
-        columns:
-          - name: year_number
-            data_type: int64
-            description: "Calendar year for the month."
-          - name: month_number
-            data_type: string
-            description: "Month index (e.g., '1' for January)."
-          - name: month_name
-            data_type: string
-            description: "Full text name of the month (e.g., 'January')."
-          - name: quarter_number
-            data_type: int64
-            description: "Corresponding calendar quarter number for this month."
-          - name: year_month
-            data_type: string
-            description: "Formatted year-month key (e.g., '2023-1')."
-          - name: month_year_name
-            data_type: string
-            description: "Human-readable combination of month name and year (e.g., 'January 2023')."
-          - name: failed_drives
-            data_type: int64
-            description: "Total count of drives reported as failed in this month."
-          - name: total_drives
-            data_type: int64
-            description: "Total count of active drives tracked for this month."
-          - name: failure_rate
-            data_type: float64
-            description: "Calculated failure rate percentage for this month."
+    - name: monthly_fail_rates
+      description: "Detailed time-series view of failure metrics calculated on a monthly basis."
+      columns:
+        - name: year_number
+          data_type: int64
+          description: "Calendar year for the month."
+          data_tests:
+            - not_null
+        - name: month_number
+          data_type: string
+          description: "Month index (e.g., '1' for January)."
+          data_tests:
+            - not_null
+        - name: month_name
+          data_type: string
+          description: "Full text name of the month (e.g., 'January')."
+          data_tests:
+            - not_null
+        - name: quarter_number
+          data_type: int64
+          description: "Corresponding calendar quarter number for this month."
+          data_tests:
+            - not_null
+        - name: year_month
+          data_type: string
+          description: "Formatted year-month key (e.g., '2023-1')."
+          data_tests:
+            - not_null
+        - name: month_year_name
+          data_type: string
+          description: "Human-readable combination of month name and year (e.g., 'January 2023')."
+          data_tests:
+            - not_null
+        - name: failed_drives
+          data_type: int64
+          description: "Total count of drives reported as failed in this month."
+        - name: total_drives
+          data_type: int64
+          description: "Total count of active drives tracked for this month."
+          data_tests:
+            - not_null
+        - name: failure_rate
+          data_type: float64
+          description: "Calculated failure rate percentage for this month."
 
-      - name: quarterly_fail_drives_per_manufacturer
-        description: "Aggregated view of failure metrics specifically grouped by manufacturer at a quarterly level."
-        columns:
-          - name: year_number
-            data_type: int64
-            description: "Calendar year for the quarter."
-          - name: quarter_number
-            data_type: int64
-            description: "Calendar quarter number (1-4)."
-          - name: manufacturer
-            data_type: string
-            description: "Manufacturer brand for this aggregated record."
-          - name: failed_drives
-            data_type: int64
-            description: "Sum of failed drives for this manufacturer in this quarter."
-          - name: total_drives
-            data_type: int64
-            description: "Sum of total active drives for this manufacturer in this quarter."
-          - name: failure_rate
-            data_type: float64
-            description: "Calculated failure rate percentage aggregated per manufacturer for this quarter."
+    - name: quarterly_fail_drives_per_manufacturer
+      description: "Aggregated view of failure metrics specifically grouped by manufacturer at a quarterly level."
+      columns:
+        - name: year_number
+          data_type: int64
+          description: "Calendar year for the quarter."
+          data_tests:
+            - not_null
+        - name: quarter_number
+          data_type: int64
+          description: "Calendar quarter number (1-4)."
+          data_tests:
+            - not_null
+        - name: manufacturer
+          data_type: string
+          description: "Manufacturer brand for this aggregated record."
+        - name: failed_drives
+          data_type: int64
+          description: "Sum of failed drives for this manufacturer in this quarter."
+        - name: total_drives
+          data_type: int64
+          description: "Sum of total active drives for this manufacturer in this quarter."
+          data_tests:
+            - not_null
+        - name: failure_rate
+          data_type: float64
+          description: "Calculated failure rate percentage aggregated per manufacturer for this quarter."
