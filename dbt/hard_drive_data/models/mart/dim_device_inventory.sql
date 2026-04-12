@@ -2,7 +2,7 @@ with model_manufacturer_lookup as (
     select
         model,
         manufacturer
-    from {{ ref('model_manufacturer_lookup') }}
+    from {{ ref('2026_04_11_model_manufacturer_lookup') }}
 )
 , serial_number_list as (
 select serial_number, model, capacity_gigabytes

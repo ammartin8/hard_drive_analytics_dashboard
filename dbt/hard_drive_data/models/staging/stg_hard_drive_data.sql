@@ -1,6 +1,7 @@
 select
     -- dates
-    DATE(TIMESTAMP_MICROS(CAST(FLOOR(date / 1000) AS INT64))) as report_date,
+   date_bq_fmt as report_date,
+   year_month,
 
     -- identifiers
     datacenter,
@@ -26,4 +27,5 @@ select
     smart_197_raw,
     smart_198_normalized,
     smart_198_raw
-from {{ source('raw_data', 'hard_drive_data_tbl_ext') }}
+from {{ source('source_hard_drive_data', 'hard_drive_data_tbl') }}
+order by report_date

@@ -49,7 +49,7 @@ The pipeline will be **batch-oriented**, orchestrated via Apache Airflow (Docker
   - `smart_attrs`   
 - **Scope**:  
   - Focus on failure trends and manufacturer reliability.  
-  - Time range: 2023–2025 (as available).  
+  - Time range: 2024–2025 (as available).  
   - Data cleaning: handle missing values, standardize dates, deduplicate.
 
 ---

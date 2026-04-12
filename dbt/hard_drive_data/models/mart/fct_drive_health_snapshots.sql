@@ -57,6 +57,7 @@ with draft_drive_data as (
     dda.model,
     dda.capacity_gigabytes,
     dda.serial_number,
+    dda.unique_device_event_id,
 
     --SMART attrs & failed drive info
     dda.failure,
@@ -78,3 +79,4 @@ with draft_drive_data as (
 )
 select *
 from join_device_inv_and_dates
+order by report_date

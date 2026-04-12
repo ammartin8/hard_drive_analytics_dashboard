@@ -60,9 +60,9 @@ default_args = {
     "start_date": datetime(2026, 1, 1)
 }
 
-# Data process ranges -- YOU MAY ADJUST START AND END DATES TO LIMIT DATA PROCESSING
-YR_START = 2025
-YR_END = 2025
+# Data process ranges -- YOU MAY ADJUST START AND END DATES HERE TO EXPAND OR LIMIT DATA PROCESSING
+YR_START = 2024
+YR_END = 2024
 QTR_START = 1
 QTR_END = 4
 
