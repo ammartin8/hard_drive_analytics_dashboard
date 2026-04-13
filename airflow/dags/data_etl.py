@@ -48,8 +48,8 @@ CSV_DIR = os.path.join(DATA_ROOT, "source_csv")
 PQ_DIR = os.path.join(DATA_ROOT, "pq")
 
 # GCP Configuration (Define these in your .env file or docker-compose.yml)
-GCP_PROJECT_ID = os.getenv("GCP_PROJECT_ID", "your-gcp-project-id")  # Optional
-GCS_BUCKET_NAME = os.getenv("GCS_BUCKET_NAME", "your-bucket-name")   # Replace with actual bucket name
+GCP_PROJECT_ID = os.getenv("GCP_PROJECT_ID", "your-gcp-project-id")
+GCS_BUCKET_NAME = os.getenv("GCS_BUCKET_NAME", "your-bucket-name")
 GCP_CONN_ID = "gcp"  # Must match the connection ID from Airflow database
 
 
@@ -61,9 +61,9 @@ default_args = {
 }
 
 # Data process ranges -- YOU MAY ADJUST START AND END DATES HERE TO EXPAND OR LIMIT DATA PROCESSING
-YR_START = 2024
-YR_END = 2024
-QTR_START = 1
+YR_START = 2025
+YR_END = 2025
+QTR_START = 4
 QTR_END = 4
 
 YEARS = range(YR_START, YR_END + 1)
@@ -94,7 +94,6 @@ def data_etl_dag_v2():
         download_dir = os.path.join(ZIP_DIR)
         os.makedirs(download_dir, exist_ok=True)
         base_url = "https://f001.backblazeb2.com/file/Backblaze-Hard-Drive-Data" # prod source
-        # base_url = "https://github.com/ammartin8/hard_drive_analytics_dashboard/releases/download/hd_2025_Q1" # dev source
         file_suffix = "data_Q"+f"{qtr}_{year}"
 
         # Construct URL and Filename
