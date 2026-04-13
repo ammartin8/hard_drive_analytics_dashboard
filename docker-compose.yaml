@@ -92,9 +92,9 @@ services:
   postgres:
     image: postgres:13
     environment:
-      POSTGRES_USER: airflow
-      POSTGRES_PASSWORD: airflow
-      POSTGRES_DB: airflow
+      POSTGRES_USER: ${AIRFLOW_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${AIRFLOW_POSTGRES_PASSWORD}
+      POSTGRES_DB: ${AIRFLOW_POSTGRES_DB}
     ports:
       - "5433:5432"
     volumes:
@@ -243,8 +243,8 @@ services:
       <<: *airflow-common-env
       _AIRFLOW_DB_MIGRATE: 'true'
       _AIRFLOW_WWW_USER_CREATE: 'true'
-      _AIRFLOW_WWW_USER_USERNAME: ${_AIRFLOW_WWW_USER_USERNAME:-airflow}
-      _AIRFLOW_WWW_USER_PASSWORD: ${_AIRFLOW_WWW_USER_PASSWORD:-airflow}
+      _AIRFLOW_WWW_USER_USERNAME: ${_AIRFLOW_WWW_USER_USERNAME:-${AIRFLOW_USER}}
+      _AIRFLOW_WWW_USER_PASSWORD: ${_AIRFLOW_WWW_USER_PASSWORD:-${AIRFLOW_PASSWORD}}
       _PIP_ADDITIONAL_REQUIREMENTS: ''
     user: "0:0"
 
@@ -256,22 +256,8 @@ services:
       - .:/app           # Optional: Mount current directory for development
     ports:
       - "8000:8000"    
-  
-  pgdatabase:
-    image: postgres:18
-    environment:
-      POSTGRES_USER: "root"
-      POSTGRES_PASSWORD: "root"
-      POSTGRES_DB: "hard_drive_db"
-    volumes:
-      - "hard_drive_postgres_data:/var/lib/postgresql"
-    ports:
-      - "5432:5432"
-    networks:
-      - pg-network
 
 volumes:
-  hard_drive_postgres_data:
   airflow-postgres-db-volume:
 
 networks:
