@@ -28,17 +28,26 @@
 
 ## 📌 Project Overview
 
-### **Problem Statement: Empowering Users with Drive Reliability Data**
+**Problem Statement**
 
-**The Context & Problem**
+Everyday users, including photographers, home lab enthusiasts, and small business owners, rely on consumer-grade storage drives they cannot afford to replace frequently. Data loss can result from the unpredictable failure of specific drive models, causing catastrophic data loss and financial damage. Currently, consumers purchase storage based on marketing specifications such as speed and capacity rather than empirical evidence regarding real-world longevity.
 
-Data is precious—whether it’s irreplaceable family memories, years of creative work, or critical business records. Yet, many everyday users (photographers, home labbers, small business owners) rely on consumer-grade drives they can’t afford to replace frequently. They are often blind to the hidden risks: specific models may fail unpredictably, leading to catastrophic data loss and financial hit. Currently, people buy storage based on marketing hype (speed/capacity) rather than empirical evidence of real-world longevity.
+**Solution**
 
-**The Solution**
+This project bridges the gap between enterprise telemetry and consumer accessibility by processing daily health snapshots from Backblaze to extract, transform, and visualize granular S.M.A.R.T. data. S.M.A.R.T stands for Self-Monitoring, Analysis, and Reporting Technology and is a monitoring system included in hard drives that reports on various attributes of the state of a given drive. Each drive includes S.M.A.R.T. metrics that report internal infomation about the drive. The resulting dashboard identifies which models maintain performance over time and highlights brands with high failure rates.
 
-This end-to-end data engineering project bridges that gap by turning enterprise-grade telemetry into actionable intelligence for everyone. By ingesting daily health snapshots from Backblaze, I extract, transform, and visualize granular S.M.A.R.T. data. The resulting dashboard answers the critical questions: Which models hold up over time? Which brands are ticking time bombs?
+<img src="./docs/images/main_dashboard_image.png">
 
-**Who This Helps**
+*Figure 1: Main dashboard view*
+
+
+<img src="./docs/images/dashboard_demo.gif">
+
+*Figure 2: Simple dashboard interactive demo*
+
+**Target Audience**
+
+The data benefits:
 - Creators & Photographers: Who need reliable archival storage but can't rely solely on volatile system drives.
 - Home Lab Enthusiasts: Building their first NAS and needing to know which drives survive the long haul before establishing redundancy.
 - Small Businesses: Seeking secure data retention without enterprise-grade IT budgets.
@@ -46,13 +55,15 @@ This end-to-end data engineering project bridges that gap by turning enterprise-
 
 **Roadmap & Project Status (Important Note)**
 
-*This project currently represents a Minimum Viable Product (MVP). Due to the upcoming expiration of my Google Cloud trial credits, I am pivoting this initiative toward fully open-source and self-hosted infrastructure to ensure long-term sustainability and accessibility.*
+*This project currently represents a Minimum Viable Product (MVP). Due to the upcoming expiration of my Google Cloud trial credits, my plan is to pivot this project towards open-source or free as well as self-hosted infrastructure to ensure long-term sustainability and accessibility.*
 
 **The Goal**
 
-Democratizing access to drive reliability data. By shifting users from passive trust in marketing to active, evidence-based decision-making, we empower them to select hardware that truly safeguards their most valuable information against the inherent risks of mechanical failure.
+To provide access to drive reliability data, shifting users from passive trust in marketing claims to active, evidence-based hardware selection. The project ingests, processes, transforms, and visualizes Backblaze's storage drive failure dataset.
 
-This project ingests, processes, transforms, and visualizes Backblaze’s storage drive failure dataset to build a dashboard that displays:
+**Dashboard Components**
+
+The dashboard displays the following metrics and visualizations:
 - **KPI Metric 1**: Most Recent Active Drives
 - **KPI Metric 2**: Total Failed Drives 
 - **Visual Chart 1**: Distribution of hard drive failure rates by manufacturer (categorical).  
@@ -173,6 +184,7 @@ Run `terraform init`
 5. Trigger Data Ingestion
 
 #### Airflow Instructions
+
 The pipeline is batch-oriented. Run the Airflow DAG to download and process data:
 1. Make sure you are in the project root directory first: `hard_drive_failure_analytics_dashboard/`
 2. Make sure the following directories exists, if not please create them: 
@@ -210,10 +222,14 @@ This process will do the following:
 - Create virtual environment
 - Install python dependencies based on uv.lock file
 
-> Note: Sometimes the airflow docker build seems fails for some reason, try to rerun and it should build successfully. In addition, upon first run, it make take time for the docker containers to all be started. The hard_drive_analytics_dashboard-airflow-init-1 container typically can take up to 5-10 minutes to start depending on compute resources.
+> Note: Sometimes the airflow docker build seems fails for some reason, try to rerun and it should build successfully. In addition, upon first run, it may take time for the docker containers to all be started. The hard_drive_analytics_dashboard-airflow-init-1 container typically can take up to 5-10 minutes to start depending on compute resources.
 
 
 ## Airflow ETL Process
+<img src="./docs/images/airflow_ui_example.png">
+
+*Figure 3: Airflow web interface showing task instances and DAG dependencies.*
+
 Once airflow docker image is up and running, head to `http://localhost:8080` and login to airflow using the assigned credentials in your .env file. Once logged in go to The left sidebar and click `Admin` then `Connections`. To run data_etl_v2 pipeline, you must set up a Google Cloud connection in airflow UI first.
 - Select `Add Connection`
 - In the Connection ID enter: `gcp`
@@ -255,11 +271,15 @@ The etl process is downloading zip file from source > extract zip file > convert
 6. Run `dbt deps --profiles-dir=./profiles --project-dir=./hard_drive_data` or `uv run dbt deps --profiles-dir=./profiles --project-dir=./hard_drive_data` to install dbt packages
 7. Run `dbt build --profiles-dir=./profiles --project-dir=./hard_drive_data` or `uv run dbt build --profiles-dir=./profiles --project-dir=./hard_drive_data` to build, test, and create all data models
 
+<img src="./docs/images/dbt-dag.png">
+
+*Figure 4. dbt lineage model overview*
+
 ## Locally Running Streamlit App
 - In the terminal go to the project root directory: `hard_drive_failure_analytics_dashboard/`
 - Run `uv run streamlit run webapp/dashboard_app.py` or `streamlit run webapp/dashboard_app.py` if your virtual environment is active in terminal.
 - If you are not automatically redirected, go to `http://localhost:8501`.
-- After a few moments the Storage Drive Analytics Dashboard should appear.
+- After a few moments, the Storage Drive Analytics Dashboard visualizations should appear.
 
 ## And finally, Thank you! 
-Thank you very much for taking the time to review my project, if you came across any issues please feel free to contact me by submitting an issue on Github! If found you had to run alternative commands due to being Mac or Windows, please feel free to submit an issue and I can add instructions in the README.md for others to follow.
+Thank you very much for taking the time to review my project, if you came across any issues or have any questions please feel free to contact me by submitting an issue on Github! If found you had to run alternative commands due to being Mac or Windows, please feel free to submit an issue and I can add instructions in the README.md for others to follow.
