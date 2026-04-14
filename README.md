@@ -18,15 +18,15 @@
 
 ## 📖 Table of Contents
 
-1. Project Overview  
-2. Dataset & Scope  
-3. Architecture & Data Flow
-4. Technology Stack  
-5. How to Run - Installation and execution guide.
+1. [Project Overview](#project-overview)
+2. [Dataset & Scope](#dataset--scope)
+3. [Architecture & Data Flow](#architecture--data-flow)
+4. [Technology Stack](#technology-stack)  
+5. [How to Run - Installation and execution guide](#how-to-run-the-project)
 
 ---
 
-## 📌 Project Overview
+## Project Overview
 
 **Problem Statement**
 
@@ -74,7 +74,7 @@ The pipeline is **batch-oriented**, orchestrated via Apache Airflow (Docker cont
 
 ---
 
-## 📦 Dataset & Scope
+## Dataset & Scope
 
 - **Source**: Backblaze Hard Drive Data
 - **Format**: CSV (multiple files)  
@@ -88,7 +88,7 @@ The pipeline is **batch-oriented**, orchestrated via Apache Airflow (Docker cont
 
 ---
 
-## 🔄 Architecture & Data Flow
+## Architecture & Data Flow
 
 ```mermaid
 flowchart TD
@@ -114,18 +114,18 @@ flowchart TD
 
 ---
 
-## 🛠️ Technology Stack
+## Technology Stack
 
 | Layer              | Technology             | Purpose                                                                 |
 |--------------------|------------------------|-------------------------------------------------------------------------|
-| Cloud              | Google Cloud           | Hosting GCS, BigQuery, Compute Engine, Airflow                         |
+| Cloud              | Google Cloud           | Hosting GCS, BigQuery                         |
 | Data Lake          | Google Cloud Storage   | Raw and processed Parquet data storage                                |
 | Data Warehouse     | BigQuery               | Optimized storage and querying for dashboard                         |
 | ETL & Batch        | Apache Airflow (Python)| ETL jobs via `@dag` and `@task` decorators with Pandas/PyArrow         |
 | Transformation     | dbt                    | Define transformations (e.g., star schema)                            |
-| Dashboard          | Streamlit              | Interactive UI with two tiles                                         |
-| Infrastructure     | Terraform              | Provision GCS, BigQuery, Airflow, compute instances                    |
-| Containerization   | Docker                 | Package Airflow + ETL + dbt apps for reproducibility                  |
+| Dashboard          | Streamlit              | Interactive UI with multiple tiles tiles                                         |
+| Infrastructure     | Terraform              | Provision GCS, BigQuery instances                    |
+| Containerization   | Docker                 | Package Airflow + ETL + dbt & streamlit app for reproducibility                  |
 
 ---
 
@@ -217,12 +217,12 @@ Now you can run the airflow image:
 `docker compose up -d`
 
 This process will do the following: 
-- build a custom lighter version docker build for airflow
-- Install uv python package manager
-- Create virtual environment
+- build a custom lighter version docker build for Airflow
+- Install uv package manager
+- Create a virtual environment
 - Install python dependencies based on uv.lock file
 
-> Note: Sometimes the airflow docker build seems fails for some reason, try to rerun and it should build successfully. In addition, upon first run, it may take time for the docker containers to all be started. The hard_drive_analytics_dashboard-airflow-init-1 container typically can take up to 5-10 minutes to start depending on compute resources.
+> Note: Sometimes the airflow docker build seems to fail for some reason. Try to rerun and it should build successfully. In addition, upon first run, it may take time for the docker containers to all be started. The hard_drive_analytics_dashboard-airflow-init-1 container typically can take up to 5-10 minutes to start depending on compute resources.
 
 
 ## Airflow ETL Process
@@ -234,16 +234,16 @@ Once airflow docker image is up and running, head to `http://localhost:8080` and
 - Select `Add Connection`
 - In the Connection ID enter: `gcp`
 - In Connection Type search for `Google Cloud` and select it
-- Select `Extra Fields` and in `Keyfile Path` section, input file path to your google credentials: `/.google/credentials/google_credentials.json`
-- Go to bottom of form and click `Save`
-- Test your connection by going to far right and clicking the line-chart symbol (next to edit button). The connection turns green you connected! If not, double check to make sure you have the correct file path to your google_credential.json file as referenced in the docker container.
-- In the left sidebar, go to `Dags` > click on `data_etl_v2` workflow > then click on `Trigger` play button in top-right corner of UI > and select `Single Run`. 
+- Select `Extra Fields` and in `Keyfile Path` section and input the file path to your google credentials: `/.google/credentials/google_credentials.json` (forward slash should be included as well)
+- Go to the bottom of the form and click `Save`
+- Test your connection by going to far right and clicking the line-chart symbol (next to edit button). If the connection turns green you have successfully connected to Google Cloud Platform! If not, double check to make sure you have the correct file path to your google_credential.json file.
+- In the left sidebar, go to `Dags` > click on `data_etl_dag_v2` workflow > then click on the `Trigger` play button in top-right corner of UI > and select `Single Run` and click `Trigger` play button again. 
 
->**Special Note & Considerations:** The data_etl_v2.py is currently set to download only 1 zip file `2025 Q4 data only (unzipped ~12 GB of data)!` Extracting all 2024 & 2025 years would be unzipped ~87.3 GB of data. Depending on compute resources run can take time (for me it was 5-7 mins for 1 year of data on a local machine). 
+>**Special Note & Considerations:** The `data_etl.py` file is currently set to download only 1 zip file **2025 Q4 data only** (unzipped files is a total of ~12 GB of data)! Extracting all 2024 & 2025 years and unzipping is ~87.3 GB of data. Depending on compute resources run can take time (for me it was 5-7 mins for 1 year of data on a local machine). 
 >
->If you have limited resources I would recommend keeping to just downloading one file just for demo testing. Otherwise, you can update the [data_etl_v2.py](./airflow/dags/data_etl.py) file in the airflow/dags folder and update `YR_START`, `YR_END`, and `QTR_START` and `QTR_END` data fields to pull more data.
+>If you have limited resources I would recommend keeping to just downloading one file just for demo testing. Otherwise, you can update the [data_etl.py](./airflow/dags/data_etl.py) file in the airflow/dags folder and update `YR_START`, `YR_END`, and `QTR_START` and `QTR_END` data fields to pull more data.
 >
->*For reference on a laptop with 15 GB of RAM and 12 cores CPU, took 26 minutes to download 2 full years of data.
+>*For reference on a laptop with 15 GB of RAM and 12 cores CPU, it took 26 minutes to download 2 full years of data and used nearly 70% of RAM and 40% of CPU.
 
 The etl process is downloading zip file from source > extract zip file > converting to parquet > then loading to GCS.
 
@@ -257,23 +257,28 @@ The etl process is downloading zip file from source > extract zip file > convert
 
 ## dbt Process
 1. In terminal go to dbt folder: `cd dbt`
-2. If your virtual env folder hasn't be created yet run `uv run dbt --version` (this will install all packages into your virtual environment and check the dbt version). Upon completion, the dbt version should output in command line. 
+2. If your virtual env folder hasn't be created yet, run `uv run dbt --version` (this will install all packages into your virtual environment and then check the dbt version). Upon completion, the dbt version should output in command line. 
 3. Two ways to run dbt commands (choose one as either way works the same):
-    - (Option 1) Use .venv virtual environment and run dbt commands as normal. 
+    - (Option 1) Activate .venv virtual environment and run dbt commands as normal. (Remaining instructions are provided assuming using Option 1)
         1. activate .venv environment: `source ../.venv/bin/activate`
     - (Option 2) Always add `uv run` before running any dbt commands
 4. Make sure you in the dbt folder (`cd dbt`), run `source ../../.env` to import environment variables from project root
 
 > Note: You  may get a error message in your dbt_project.yml file stating dbt configuration is invalid. You can safely ignore this error since this is likely due to dbt not recognizing that dbt is installed in a virtual environment instead of the local machine.
 
->*Additional note: Before running any additional dbt command go the [_sources.yml](./dbt/hard_drive_data/models/staging/_sources.yml) file and update the database section by entering your project ID where it states: `{{ env_var('GCP_PROJECT_ID', 'my-project-id') }}`. Unfortunately due to my Google Cloud trial expiring, I did not have time to figure out why the project ID would not import automatically. 😔
+>*Additional note: Before running any additional dbt commands go the [_sources.yml](./dbt/hard_drive_data/models/staging/_sources.yml) file and update the database section by entering your project ID where it states: `{{ env_var('GCP_PROJECT_ID', 'my-project-id') }}`. Unfortunately due to my Google Cloud trial expiring, I did not have time to figure out why the project ID would not import automatically. 😔
 
-5. Run `dbt debug --profiles-dir=./profiles --project-dir=./hard_drive_data` to test if connection is working. If checks failed address issues. Common solutions to issues include:
-  - Make sure the project ID is correct in profile.yml
-  - Make sure you are running commands while in dbt folder since profile-dir and project-dir references from the `dbt/` folder
-  - Make sure your google_credential.json file is in correct folder. As alternative you can replace the relative path in your `profile.yml` file and put the absolute file path instead.
-6. Run `dbt deps --profiles-dir=./profiles --project-dir=./hard_drive_data` or `uv run dbt deps --profiles-dir=./profiles --project-dir=./hard_drive_data` to install dbt packages
-7. Run `dbt build --profiles-dir=./profiles --project-dir=./hard_drive_data` or `uv run dbt build --profiles-dir=./profiles --project-dir=./hard_drive_data` to build, test, and create all data models
+5. Go to the `example.profiles.yml` in the `dbt/profiles` folder and rename it to profiles.yml. Then update the file by entering your google project ID.
+
+6. Make sure you terminal is in the `dbt/` directory and then run `dbt debug --profiles-dir=./profiles --project-dir=./hard_drive_data` to test if connection is working. If any checks fail, address the issues. Common solutions to issues include:
+  - Making sure the project ID is correct in profile.yml
+  - Making sure you are running commands while in dbt folder since profile-dir and project-dir references from the `dbt/` folder
+  - Making sure your google_credential.json file is in the correct folder and referenced correctly. As alternative you can replace the relative path in your `profiles.yml` file and put the absolute file path instead.
+  - If using Option 2 to run dbt commans, make sure to add uv run before the command
+7. Run `dbt deps --profiles-dir=./profiles --project-dir=./hard_drive_data` to install dbt packages
+8. Run `dbt build --profiles-dir=./profiles --project-dir=./hard_drive_data` to build, test, and create all data models.
+
+Now all data tables are created in your BigQuery dataset.
 
 <img src="./docs/images/dbt-dag.png">
 
@@ -283,12 +288,16 @@ The etl process is downloading zip file from source > extract zip file > convert
 - In the terminal go to the project root directory: `hard_drive_failure_analytics_dashboard/`
 - Run `uv run streamlit run webapp/dashboard_app.py` or `streamlit run webapp/dashboard_app.py` if your virtual environment is active in terminal.
 - If you are not automatically redirected, go to `http://localhost:8501`.
-- After a few moments, the Storage Drive Analytics Dashboard visualizations should appear.
+- After a few moments of loading the data, the Storage Drive Analytics Dashboard visualizations should appear.
 
 ## And finally, Thank you! 😄
-Thank you very much for taking the time to review my project, if you came across any issues or have any questions please feel free to contact me by submitting an [issue](https://github.com/ammartin8/hard_drive_analytics_dashboard/issues) on Github! If found you had to run alternative commands due to being Mac or Windows, please feel free to submit an issue and I can add instructions in the README.md for others to follow.
+Thank you very much for taking the time to review my project, if you came across any issues or have any questions please feel free to contact me by submitting an [issue](https://github.com/ammartin8/hard_drive_analytics_dashboard/issues) on Github! If you had to run alternative commands due to being on a Mac or Windows operating system, please feel free to submit an issue and I can add instructions in the README.md for others to follow.
 
 ## Appendix
+
+### Data Source
+Backblaze. (2024-2025). Hard Drive Test Data. Cloud Storage Resources.  
+Retrieved [April 14th, 2026], from https://www.backblaze.com/cloud-storage/resources/hard-drive-test-data
 
 ### Complete Project Directory Structure
 ```bash
@@ -344,7 +353,6 @@ hard_drive_failure_analytics_dashboard
 │   ├── IMPLEMENTATION_GUIDE.md
 │   └── BigQuery_SQL_Cmd.sql
 ├── LICENSE
-├── main.py
 ├── pyproject.toml
 ├── README.md
 ├── terraform
