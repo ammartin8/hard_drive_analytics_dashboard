@@ -1,6 +1,6 @@
 # 📊 Project Plan: Storage Drive Analytics Dashboard
 
-### 🚧 Status: <span style="color: #dfa018ff;">Work in Progress</span>
+### 🔧 Status: Beta Version Complete
 
 > **Project Title**: Storage Drive Analytics Dashboard  
 > **Dataset Source**: Backblaze Storage Drive Data  
@@ -36,15 +36,6 @@ Everyday users, including photographers, home lab enthusiasts, and small busines
 
 This project bridges the gap between enterprise telemetry and consumer accessibility by processing daily health snapshots from Backblaze to extract, transform, and visualize granular S.M.A.R.T. data. S.M.A.R.T stands for Self-Monitoring, Analysis, and Reporting Technology and is a monitoring system included in hard drives that reports on various attributes of the state of a given drive. Each drive includes S.M.A.R.T. metrics that report internal infomation about the drive. The resulting dashboard identifies which models maintain performance over time and highlights brands with high failure rates.
 
-<img src="./docs/images/main_dashboard_image.png">
-
-*Figure 1: Main dashboard view*
-
-
-<img src="./docs/images/dashboard_demo.gif">
-
-*Figure 2: Simple dashboard interactive demo*
-
 **Target Audience**
 
 The data benefits:
@@ -69,6 +60,15 @@ The dashboard displays the following metrics and visualizations:
 - **Visual Chart 1**: Distribution of hard drive failure rates by manufacturer (categorical).  
 - **Visual Chart 2**: Active and failed storage drive trends over time (stacked bar chart).
 - **Table 1**: List of models, total drives, failed drives, and failure rate by quarter
+
+<img src="./docs/images/main_dashboard_image.png">
+
+*Figure 1: Main dashboard view*
+
+
+<img src="./docs/images/dashboard_demo.gif">
+
+*Figure 2: Simple dashboard interactive demo*
 
 The pipeline is **batch-oriented**, orchestrated via Apache Airflow (Docker container), with Python-based ETL tasks and dbt for transformations. BigQuery stores final star schema tables, and Streamlit provides the interactive dashboard. Infrastructure is provisioned via Terraform and containerized using Docker.
 
