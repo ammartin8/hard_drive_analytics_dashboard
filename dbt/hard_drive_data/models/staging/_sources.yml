@@ -5,7 +5,7 @@ sources:
     description: Raw hard drive failure data from Backblaze
     database: |
       {%- if target.type == 'bigquery' -%}
-        {{ env_var('GCP_PROJECT_ID', 'dtc-de-mod1-workshop22937') }}
+        {{ env_var('GCP_PROJECT_ID', 'my-project-id') }}
       {%- else -%}
         hard_drive_data
       {%- endif -%}

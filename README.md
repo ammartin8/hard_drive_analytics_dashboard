@@ -55,7 +55,7 @@ The data benefits:
 
 **Roadmap & Project Status (Important Note)**
 
-*This project currently represents a Minimum Viable Product (MVP). Due to the upcoming expiration of my Google Cloud trial credits, my plan is to pivot this project towards open-source or free as well as self-hosted infrastructure to ensure long-term sustainability and accessibility.*
+*This project currently represents a Minimum Viable Product (MVP). Due to the upcoming expiration of my Google Cloud trial credits, my plan is to pivot this project towards open-source or free as well as self-hosted infrastructure to ensure long-term sustainability and accessibility. In addition, due to restricted time on completing this project in cloud, the emphasis on this project is more on building the data platform compared to the analytics. I'm hoping to further enhance the analytics proportion of project at future date.*
 
 **The Goal**
 
@@ -263,7 +263,11 @@ The etl process is downloading zip file from source > extract zip file > convert
         1. activate .venv environment: `source ../.venv/bin/activate`
     - (Option 2) Always add `uv run` before running any dbt commands
 4. Make sure you in the dbt folder (`cd dbt`), run `source ../../.env` to import environment variables from project root
+
 > Note: You  may get a error message in your dbt_project.yml file stating dbt configuration is invalid. You can safely ignore this error since this is likely due to dbt not recognizing that dbt is installed in a virtual environment instead of the local machine.
+
+>*Additional note: Before running any additional dbt command go the [_sources.yml](./dbt/hard_drive_data/models/staging/_sources.yml) file and update the database section by entering your project ID where it states: `{{ env_var('GCP_PROJECT_ID', 'my-project-id') }}`. Unfortunately due to my Google Cloud trial expiring, I did not have time to figure out why the project ID would not import automatically. 😔
+
 5. Run `dbt debug --profiles-dir=./profiles --project-dir=./hard_drive_data` to test if connection is working. If checks failed address issues. Common solutions to issues include:
   - Make sure the project ID is correct in profile.yml
   - Make sure you are running commands while in dbt folder since profile-dir and project-dir references from the `dbt/` folder
@@ -281,5 +285,74 @@ The etl process is downloading zip file from source > extract zip file > convert
 - If you are not automatically redirected, go to `http://localhost:8501`.
 - After a few moments, the Storage Drive Analytics Dashboard visualizations should appear.
 
-## And finally, Thank you! 
-Thank you very much for taking the time to review my project, if you came across any issues or have any questions please feel free to contact me by submitting an issue on Github! If found you had to run alternative commands due to being Mac or Windows, please feel free to submit an issue and I can add instructions in the README.md for others to follow.
+## And finally, Thank you! 😄
+Thank you very much for taking the time to review my project, if you came across any issues or have any questions please feel free to contact me by submitting an [issue](https://github.com/ammartin8/hard_drive_analytics_dashboard/issues) on Github! If found you had to run alternative commands due to being Mac or Windows, please feel free to submit an issue and I can add instructions in the README.md for others to follow.
+
+## Appendix
+
+### Complete Project Directory Structure
+```bash
+hard_drive_failure_analytics_dashboard
+├── .google
+│   ├── credentials
+│   │   └── google_credentials.json
+├── airflow
+│   ├── config
+│   │   └── airflow.cfg
+│   ├── dags
+│   │   └── data_etl.py
+│   ├── Dockerfile
+├── ├── logs
+│   └── plugins
+├── dbt
+│   └── hard_drive_data
+│       ├── analyses
+│       │   ├── datacenter_list_review.sql
+│       │   ├── failure_attrs_review.sql
+│       │   ├── model_cnt_review.sql
+│       │   └── model_list_review.sql
+│       ├── dbt_project.yml
+│       ├── macros
+│       ├── models
+│       │   ├── intermediate
+│       │   │   ├── int_fct_drive_add_cols.sql
+│       │   │   └── schema.yml
+│       │   ├── mart
+│       │   │   ├── dim_date.sql
+│       │   │   ├── dim_device_inventory.sql
+│       │   │   ├── fct_drive_health_snapshots.sql
+│       │   │   ├── reporting
+│       │   │   │   ├── latest_quarterly_drive_trends_per_manufacturer.sql
+│       │   │   │   ├── monthly_fail_rates.sql
+│       │   │   │   ├── quarterly_fail_drives_per_manufacturer.sql
+│       │   │   │   └── schema.yml
+│       │   │   └── schema.yml
+│       │   └── staging
+│       │       ├── _sources.yml
+│       │       └── stg_hard_drive_data.sql
+│       ├── package-lock.yml
+│       ├── packages.yml
+│       ├── README.md
+│       ├── seeds
+│       │   └── 2026_04_11_model_manufacturer_lookup.csv
+│       ├── snapshots
+│       └── tests
+├── .env
+├── docker-compose.yaml
+├── Dockerfile
+├── docs
+│   ├── IMPLEMENTATION_GUIDE.md
+│   └── BigQuery_SQL_Cmd.sql
+├── LICENSE
+├── main.py
+├── pyproject.toml
+├── README.md
+├── terraform
+│   ├── main.tf
+│   ├── terraform.tfstate.backup
+│   └── variables.tf
+├── uv.lock
+└── webapp
+    ├── dashboard_app.py
+    └── styles.css
+```
