@@ -277,7 +277,7 @@ with st.sidebar:
     st.caption(notes_text)
     st.sidebar.markdown('''
     ---
-    Created with ❤️ by [Amah](https://amahmartin.me).
+    Created with ❤️ by [Amah](https://github.com/ammartin8).
     ''')
     
 # --- FOOTER / DATA INFO ---

@@ -64,7 +64,7 @@ default_args = {
 # Data process ranges -- YOU MAY ADJUST START AND END DATES HERE TO EXPAND TO ADD 2024 & 2025 OR LIMIT DATA PROCESSING
 YR_START = 2025
 YR_END = 2025
-QTR_START = 4
+QTR_START = 1
 QTR_END = 4
 # Note: Dashboard is setup to label any model's manufacturer brand listed in 2024 and 2025, add earlier data may result in 'Unknown' manufacturer labels in dashboard
 # ===================================================================================================================================================================
