@@ -7,12 +7,23 @@
 > **Cloud Provider**: Google Cloud Platform (GCP)  
 > **Data Lake**: Google Cloud Storage (GCS)  
 > **Data Warehouse**: BigQuery  
-> **ETL & Batch Processing**: Apache Airflow (Python)
+> **ETL & Batch Processing**: Apache Airflow (Python)  
 > **Data Transformation**: dbt (Python + SQL)  
 > **Orchestration**: Apache Airflow (Python) (Docker Container)
 > **Dashboard**: Streamlit  
 > **Infrastructure as Code**: Terraform  
 > **Containerization**: Docker  
+
+---
+## About Me
+
+### 🚀 Ready for a Data Engineering Challenge!
+Hello 🌎️! I'm Amah! I am passionate about building scalable, reliable, and efficient data systems that empower business intelligence. This project demonstrates my ability to handle the full lifecycle of data—from ingestion to production deployment on GCP.
+
+### 👋🏿 Connect With Me
+LinkedIn: [Linkedin Profile](https://www.linkedin.com/in/amahmartin) \
+GitHub: [Github Profile](https://github.com/ammartin8)
+
 
 ---
 
@@ -369,3 +380,5 @@ hard_drive_failure_analytics_dashboard
     ├── dashboard_app.py
     └── styles.css
 ```
+
+
